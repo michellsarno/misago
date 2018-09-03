@@ -12,15 +12,15 @@ import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 
 
 @SpringBootApplication
-public class BitCoinApplication extends SpringBootServletInitializer{
+public class MisagoApplication extends SpringBootServletInitializer{
 	
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(BitCoinApplication.class);
+        return application.sources(MisagoApplication.class);
     }
 
 	public static void main(String[] args) {
-		SpringApplication.run(BitCoinApplication.class, args);
+		SpringApplication.run(MisagoApplication.class, args);
 	}
 	
 	@Bean
