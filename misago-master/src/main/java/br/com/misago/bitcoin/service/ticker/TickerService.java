@@ -1,4 +1,4 @@
-package br.com.misago.bitcoin.service;
+package br.com.misago.bitcoin.service.ticker;
 
 import java.util.ArrayList;
 import java.util.List;

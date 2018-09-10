@@ -1,12 +1,13 @@
-package br.com.misago.bitcoin.service;
+package br.com.misago.bitcoin.service.ticker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import br.com.misago.bitcoin.service.ConnectionApiRestService;
 import br.com.misago.bitcoin.vo.TickerNegocieCoinsVo;
 import br.com.misago.bitcoin.vo.TickerVo;
 
-public class TickerBRNegocieCoins extends TickerConnectionService{
+public class TickerBRNegocieCoins extends ConnectionApiRestService{
 	
 	private static String NAME = "NegocieCoins";
 	private static String LOCATE = "BR";

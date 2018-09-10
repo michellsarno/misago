@@ -6,11 +6,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-public class TickerConnectionService {
+public class ConnectionApiRestService {
 	
 	private RestTemplate restTemplate;
 	
-	public TickerConnectionService(){
+	public ConnectionApiRestService(){
 		restTemplate = buildingRestTemplateWithSSL();
 	}
 
