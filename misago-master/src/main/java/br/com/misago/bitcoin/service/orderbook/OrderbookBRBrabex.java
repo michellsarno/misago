@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.misago.bitcoin.service.ConnectionApiRestService;
-import br.com.misago.bitcoin.vo.orderbook.MercadoBitcoinOrderbookVo;
+import br.com.misago.bitcoin.vo.orderbook.BrabexOrderbookVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookAskVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookBidVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookVo;
 
-public class OrderbookBRMercadoBitcoin extends ConnectionApiRestService{
+public class OrderbookBRBrabex extends ConnectionApiRestService{
 	
-	private static String NAME = "Mercado Bitcoin";
+	private static String NAME = "Brabex";
 	private static String LOCATE = "BR";
-	private static String URL = "https://www.mercadobitcoin.net/api/#COIN#/orderbook/";
+	private static String URL = "https://exchange.brabex.com.br/api/v1/BRL/orderbook?crypto_currency=#COIN#";
+	
 	private String coin;
 	
-	public OrderbookBRMercadoBitcoin(String coin){
+	public OrderbookBRBrabex(String coin){
 		
 		if(coin.equals("BTC")){
 			this.coin = "BTC";
@@ -26,7 +27,7 @@ public class OrderbookBRMercadoBitcoin extends ConnectionApiRestService{
 	
 	public OrderbookVo getOrderbook(){
 		
-		MercadoBitcoinOrderbookVo mercadoBitcoinOrderbookVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , MercadoBitcoinOrderbookVo.class);
+		BrabexOrderbookVo brabexOrderbookVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , BrabexOrderbookVo.class);
 		
 		OrderbookVo orderbookVo = new OrderbookVo();
 		
@@ -34,12 +35,12 @@ public class OrderbookBRMercadoBitcoin extends ConnectionApiRestService{
 		List<OrderbookBidVo> orderbookBidVoList = new ArrayList<OrderbookBidVo>();
 		
 		
-		for(int i = 0; i < mercadoBitcoinOrderbookVo.getAsks().length; i++){
-			orderbookAskVoList.add( normalizeDataOrderbookAsk(mercadoBitcoinOrderbookVo.getAsks()[i][0] , mercadoBitcoinOrderbookVo.getAsks()[i][1] ) );
+		for(int i = 0; i < brabexOrderbookVo.getAsks().length; i++){
+			orderbookAskVoList.add( normalizeDataOrderbookAsk(brabexOrderbookVo.getAsks()[i][0] , brabexOrderbookVo.getAsks()[i][1] ) );
 		}
 		
-		for(int i = 0; i < mercadoBitcoinOrderbookVo.getBids().length; i++){
-			orderbookBidVoList.add( normalizeDataOrderbookBid(mercadoBitcoinOrderbookVo.getBids()[i][0] , mercadoBitcoinOrderbookVo.getBids()[i][1] ) );
+		for(int i = 0; i < brabexOrderbookVo.getBids().length; i++){
+			orderbookBidVoList.add( normalizeDataOrderbookBid(brabexOrderbookVo.getBids()[i][0] , brabexOrderbookVo.getBids()[i][1] ) );
 		}
 		
 		orderbookVo.setOrderbookAsk(orderbookAskVoList);

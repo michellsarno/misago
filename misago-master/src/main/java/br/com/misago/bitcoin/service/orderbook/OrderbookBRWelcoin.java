@@ -4,29 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.misago.bitcoin.service.ConnectionApiRestService;
-import br.com.misago.bitcoin.vo.orderbook.MercadoBitcoinOrderbookVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookAskVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookBidVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookVo;
+import br.com.misago.bitcoin.vo.orderbook.WelcoinOrderbookAsk;
+import br.com.misago.bitcoin.vo.orderbook.WelcoinOrderbookBid;
+import br.com.misago.bitcoin.vo.orderbook.WelcoinOrderbookVo;
 
-public class OrderbookBRMercadoBitcoin extends ConnectionApiRestService{
+public class OrderbookBRWelcoin extends ConnectionApiRestService{
 	
-	private static String NAME = "Mercado Bitcoin";
+	private static String NAME = "Welcoin";
 	private static String LOCATE = "BR";
-	private static String URL = "https://www.mercadobitcoin.net/api/#COIN#/orderbook/";
+	private static String URL = "https://broker.welcoin.com.br/api/v3/#COIN#/orderbook";
 	private String coin;
 	
-	public OrderbookBRMercadoBitcoin(String coin){
+	public OrderbookBRWelcoin(String coin){
 		
 		if(coin.equals("BTC")){
-			this.coin = "BTC";
+			this.coin = "btcbrl";
 		}
 		
 	}
 	
 	public OrderbookVo getOrderbook(){
 		
-		MercadoBitcoinOrderbookVo mercadoBitcoinOrderbookVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , MercadoBitcoinOrderbookVo.class);
+		WelcoinOrderbookVo orderbookWelcoinVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , WelcoinOrderbookVo.class);
 		
 		OrderbookVo orderbookVo = new OrderbookVo();
 		
@@ -34,12 +36,15 @@ public class OrderbookBRMercadoBitcoin extends ConnectionApiRestService{
 		List<OrderbookBidVo> orderbookBidVoList = new ArrayList<OrderbookBidVo>();
 		
 		
-		for(int i = 0; i < mercadoBitcoinOrderbookVo.getAsks().length; i++){
-			orderbookAskVoList.add( normalizeDataOrderbookAsk(mercadoBitcoinOrderbookVo.getAsks()[i][0] , mercadoBitcoinOrderbookVo.getAsks()[i][1] ) );
+		for (WelcoinOrderbookAsk ask : orderbookWelcoinVo.getAsk()) {
+			
+			orderbookAskVoList.add( normalizeDataOrderbookAskNegocieCoins(ask) );
+			
 		}
 		
-		for(int i = 0; i < mercadoBitcoinOrderbookVo.getBids().length; i++){
-			orderbookBidVoList.add( normalizeDataOrderbookBid(mercadoBitcoinOrderbookVo.getBids()[i][0] , mercadoBitcoinOrderbookVo.getBids()[i][1] ) );
+		for (WelcoinOrderbookBid bid : orderbookWelcoinVo.getBid()) {
+			
+			orderbookBidVoList.add( normalizeDataOrderbookBidNegocieCoins(bid) );
 		}
 		
 		orderbookVo.setOrderbookAsk(orderbookAskVoList);
@@ -49,28 +54,28 @@ public class OrderbookBRMercadoBitcoin extends ConnectionApiRestService{
 		
 	}
 	
-	private OrderbookBidVo normalizeDataOrderbookBid(String price, String quantity ){
+	private OrderbookBidVo normalizeDataOrderbookBidNegocieCoins(WelcoinOrderbookBid bid ){
 
 		OrderbookBidVo orderbookBidVo = new OrderbookBidVo();
 		
 		orderbookBidVo.setExchange(NAME);
 		orderbookBidVo.setLocate(LOCATE);
-		orderbookBidVo.setPrice(Double.valueOf(price));
-		orderbookBidVo.setQuantity(Double.valueOf(quantity));
+		orderbookBidVo.setPrice(bid.getPrice());
+		orderbookBidVo.setQuantity(bid.getQuantity());
 		orderbookBidVo.setOrderTotal(orderbookBidVo.getPrice() * orderbookBidVo.getQuantity());
 		
 		return orderbookBidVo;
 	}
 	
 	
-	private OrderbookAskVo normalizeDataOrderbookAsk(String price, String quantity ){
+	private OrderbookAskVo normalizeDataOrderbookAskNegocieCoins(WelcoinOrderbookAsk ask ){
 
 		OrderbookAskVo orderbookAskVo = new OrderbookAskVo();
 		
 		orderbookAskVo.setExchange(NAME);
 		orderbookAskVo.setLocate(LOCATE);
-		orderbookAskVo.setPrice(Double.valueOf(price));
-		orderbookAskVo.setQuantity(Double.valueOf(quantity));
+		orderbookAskVo.setPrice(ask.getPrice());
+		orderbookAskVo.setQuantity(ask.getQuantity());
 		orderbookAskVo.setOrderTotal(orderbookAskVo.getPrice() * orderbookAskVo.getQuantity() );
 		
 		return orderbookAskVo;

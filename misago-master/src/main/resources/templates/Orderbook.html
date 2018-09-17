@@ -40,7 +40,6 @@
                   <th>Price</th>
                   <th>Quantity</th>
                   <th>Total</th>
-                  <th>ID</th>
                 </tr>
               </thead>
               
@@ -49,10 +48,9 @@
               	<tr th:each="orderbookAskVo : ${askList}">
                 	<td th:text="${orderbookAskVo.locate}"></td>
                 	<td th:text="${orderbookAskVo.exchange}"></td>
-					<td th:text="${orderbookAskVo.price}"></td>
+					<td th:text="${#numbers.formatDecimal(orderbookAskVo.price, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
 					<td th:text="${orderbookAskVo.quantity}"></td>
-					<td th:text="${orderbookAskVo.orderTotal}"></td>
-					<td th:text="${orderbookAskVo.id}"></td>
+					<td th:text="${#numbers.formatDecimal(orderbookAskVo.orderTotal, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
                 </tr>
                 
               </tbody>
@@ -70,7 +68,6 @@
                   <th>Price</th>
                   <th>Quantity</th>
                   <th>Total</th>
-                  <th>ID</th>
                 </tr>
               </thead>
               
@@ -79,10 +76,9 @@
               	<tr th:each="orderbookBidVo : ${bidList}">
                 	<td th:text="${orderbookBidVo.locate}"></td>
                 	<td th:text="${orderbookBidVo.exchange}"></td>
-					<td th:text="${orderbookBidVo.price}"></td>
+					<td th:text="${#numbers.formatDecimal(orderbookBidVo.price, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
 					<td th:text="${orderbookBidVo.quantity}"></td>
-					<td th:text="${orderbookBidVo.orderTotal}"></td>
-					<td th:text="${orderbookBidVo.id}"></td>
+					<td th:text="${#numbers.formatDecimal(orderbookBidVo.orderTotal, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
                 </tr>
                 
               </tbody>

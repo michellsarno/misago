@@ -64,6 +64,7 @@ public class OrderbookBRNegocieCoins extends ConnectionApiRestService{
 		orderbookBidVo.setLocate(LOCATE);
 		orderbookBidVo.setPrice(bid.getPrice());
 		orderbookBidVo.setQuantity(bid.getQuantity());
+		orderbookBidVo.setOrderTotal(orderbookBidVo.getPrice() * orderbookBidVo.getQuantity());
 		
 		return orderbookBidVo;
 	}
@@ -77,6 +78,7 @@ public class OrderbookBRNegocieCoins extends ConnectionApiRestService{
 		orderbookAskVo.setLocate(LOCATE);
 		orderbookAskVo.setPrice(ask.getPrice());
 		orderbookAskVo.setQuantity(ask.getQuantity());
+		orderbookAskVo.setOrderTotal(orderbookAskVo.getPrice() * orderbookAskVo.getQuantity() );
 		
 		return orderbookAskVo;
 	}
