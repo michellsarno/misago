@@ -12,22 +12,8 @@
 <section layout:fragment="conteudo">
 
 	<div class="container-fluid">
-      <div class="row">
-        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Ticker<span class="sr-only">(current)</span></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="/ticker">Ticker</a>
-            </li>
-            
-          </ul>
-
-        </nav>
-
-        <main class="col-sm-9 ml-sm-auto col-md-10 pt-3" role="main">
+	
+	 <main role="main">
 
           <h2>Ticker</h2>
           <div class="table-responsive">
@@ -51,14 +37,13 @@
               	<tr th:each="tickerVo : ${tickers}">
                 	<td th:text="${tickerVo.locate}"></td>
                 	<td th:text="${tickerVo.exchange}"></td>
-					<td th:text="${tickerVo.high}"></td>
-					<td th:text="${tickerVo.low}"></td>
-					<td th:text="${tickerVo.vol}"></td>
-					<td th:text="${tickerVo.last}"></td>
-					<td th:text="${tickerVo.buy}"></td>
-					<td th:text="${tickerVo.sell}"></td>
+					<td th:text="${#numbers.formatDecimal(tickerVo.high, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
+					<td th:text="${#numbers.formatDecimal(tickerVo.low, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
+					<td th:text="${#numbers.formatDecimal(tickerVo.vol, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
+					<td th:text="${#numbers.formatDecimal(tickerVo.last, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
+					<td th:text="${#numbers.formatDecimal(tickerVo.buy, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
+					<td th:text="${#numbers.formatDecimal(tickerVo.sell, 0, 'DEFAULT', 2, 'DEFAULT')}"></td>
 					<td th:text="${tickerVo.date}"></td>
-                  
                 </tr>
                 
               </tbody>
@@ -68,7 +53,6 @@
           	
         </main>
       </div>
-    </div>
 	
 </section>
 
