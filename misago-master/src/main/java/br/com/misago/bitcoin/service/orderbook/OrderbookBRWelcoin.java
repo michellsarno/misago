@@ -3,7 +3,6 @@ package br.com.misago.bitcoin.service.orderbook;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.misago.bitcoin.service.ConnectionApiRestService;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookAskVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookBidVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookVo;
@@ -11,7 +10,7 @@ import br.com.misago.bitcoin.vo.orderbook.WelcoinOrderbookAsk;
 import br.com.misago.bitcoin.vo.orderbook.WelcoinOrderbookBid;
 import br.com.misago.bitcoin.vo.orderbook.WelcoinOrderbookVo;
 
-public class OrderbookBRWelcoin extends ConnectionApiRestService{
+public class OrderbookBRWelcoin extends OrderbookDefault{
 	
 	private static String NAME = "Welcoin";
 	private static String LOCATE = "BR";
@@ -28,29 +27,35 @@ public class OrderbookBRWelcoin extends ConnectionApiRestService{
 	
 	public OrderbookVo getOrderbook(){
 		
-		WelcoinOrderbookVo orderbookWelcoinVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , WelcoinOrderbookVo.class);
-		
-		OrderbookVo orderbookVo = new OrderbookVo();
-		
-		List<OrderbookAskVo> orderbookAskVoList = new ArrayList<OrderbookAskVo>();
-		List<OrderbookBidVo> orderbookBidVoList = new ArrayList<OrderbookBidVo>();
-		
-		
-		for (WelcoinOrderbookAsk ask : orderbookWelcoinVo.getAsk()) {
+		try{
 			
-			orderbookAskVoList.add( normalizeDataOrderbookAskNegocieCoins(ask) );
+			WelcoinOrderbookVo orderbookWelcoinVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , WelcoinOrderbookVo.class);
 			
+			OrderbookVo orderbookVo = new OrderbookVo();
+			
+			List<OrderbookAskVo> orderbookAskVoList = new ArrayList<OrderbookAskVo>();
+			List<OrderbookBidVo> orderbookBidVoList = new ArrayList<OrderbookBidVo>();
+			
+			
+			for (WelcoinOrderbookAsk ask : orderbookWelcoinVo.getAsk()) {
+				
+				orderbookAskVoList.add( normalizeDataOrderbookAskNegocieCoins(ask) );
+				
+			}
+			
+			for (WelcoinOrderbookBid bid : orderbookWelcoinVo.getBid()) {
+				
+				orderbookBidVoList.add( normalizeDataOrderbookBidNegocieCoins(bid) );
+			}
+			
+			orderbookVo.setOrderbookAsk(orderbookAskVoList);
+			orderbookVo.setOrderbookBid(orderbookBidVoList);
+			
+			return orderbookVo;
+			
+		}catch (Exception e) {
+			return createDefaultObject(NAME, LOCATE, coin);
 		}
-		
-		for (WelcoinOrderbookBid bid : orderbookWelcoinVo.getBid()) {
-			
-			orderbookBidVoList.add( normalizeDataOrderbookBidNegocieCoins(bid) );
-		}
-		
-		orderbookVo.setOrderbookAsk(orderbookAskVoList);
-		orderbookVo.setOrderbookBid(orderbookBidVoList);
-		
-		return orderbookVo;
 		
 	}
 	

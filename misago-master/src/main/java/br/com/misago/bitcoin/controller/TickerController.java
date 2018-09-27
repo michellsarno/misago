@@ -11,7 +11,7 @@ import br.com.misago.bitcoin.service.ticker.TickerService;
 import br.com.misago.bitcoin.vo.TickerVo;
 
 @Controller
-@RequestMapping({"/ticker", "", "/"})
+@RequestMapping({"/ticker"})
 public class TickerController {
 	
 	@Autowired

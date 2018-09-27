@@ -3,11 +3,10 @@ package br.com.misago.bitcoin.service.ticker;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import br.com.misago.bitcoin.service.ConnectionApiRestService;
 import br.com.misago.bitcoin.vo.TickerMercadoBitCoinVo;
 import br.com.misago.bitcoin.vo.TickerVo;
 
-public class TickerBRMercadoBitCoin extends ConnectionApiRestService{
+public class TickerBRMercadoBitCoin extends TickerDefault{
 	
 	private static String NAME = "Mercado Bitcoin";
 	private static String LOCATE = "BR";
@@ -25,15 +24,23 @@ public class TickerBRMercadoBitCoin extends ConnectionApiRestService{
 	
 	public TickerVo getTicker(){
 		
-		TickerMercadoBitCoinVo tickerVo = getRestTemplate().getForObject( URL_TICKER.replace("#COIN#", coin) , TickerMercadoBitCoinVo.class);
+		try{
 		
-//		ResponseEntity<String> response = restTemplate.getForEntity("https://www.mercadobitcoin.net/api/BTC/ticker/", String.class);
-//		
-//		System.out.println("response...: "+response.toString());
-//		
-//		System.out.println(tickerVo.toString());
+			TickerMercadoBitCoinVo tickerVo = getRestTemplate().getForObject( URL_TICKER.replace("#COIN#", coin) , TickerMercadoBitCoinVo.class);
+			
+	//		ResponseEntity<String> response = restTemplate.getForEntity("https://www.mercadobitcoin.net/api/BTC/ticker/", String.class);
+	//		
+	//		System.out.println("response...: "+response.toString());
+	//		
+	//		System.out.println(tickerVo.toString());
+			
+			return normalizeDataTickerMercadoBitCoin(tickerVo);
 		
-		return normalizeDataTickerMercadoBitCoin(tickerVo);
+		}catch (Exception e) {
+			
+			return createDefaultObject(NAME,LOCATE);
+			
+		}
 		
 		
 	}

@@ -9,7 +9,7 @@ import br.com.misago.bitcoin.service.orderbook.OrderbookService;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookVo;
 
 @Controller
-@RequestMapping({"/orderbook", "", "/"})
+@RequestMapping({"/orderbook"})
 public class OrderbookController {
 	
 	@Autowired

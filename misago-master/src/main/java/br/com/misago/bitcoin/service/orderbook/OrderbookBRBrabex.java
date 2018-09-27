@@ -3,13 +3,12 @@ package br.com.misago.bitcoin.service.orderbook;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.misago.bitcoin.service.ConnectionApiRestService;
 import br.com.misago.bitcoin.vo.orderbook.BrabexOrderbookVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookAskVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookBidVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookVo;
 
-public class OrderbookBRBrabex extends ConnectionApiRestService{
+public class OrderbookBRBrabex extends OrderbookDefault{
 	
 	private static String NAME = "Brabex";
 	private static String LOCATE = "BR";
@@ -27,26 +26,32 @@ public class OrderbookBRBrabex extends ConnectionApiRestService{
 	
 	public OrderbookVo getOrderbook(){
 		
-		BrabexOrderbookVo brabexOrderbookVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , BrabexOrderbookVo.class);
+		try{
 		
-		OrderbookVo orderbookVo = new OrderbookVo();
+			BrabexOrderbookVo brabexOrderbookVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , BrabexOrderbookVo.class);
+			
+			OrderbookVo orderbookVo = new OrderbookVo();
+			
+			List<OrderbookAskVo> orderbookAskVoList = new ArrayList<OrderbookAskVo>();
+			List<OrderbookBidVo> orderbookBidVoList = new ArrayList<OrderbookBidVo>();
+			
+			
+			for(int i = 0; i < brabexOrderbookVo.getAsks().length; i++){
+				orderbookAskVoList.add( normalizeDataOrderbookAsk(brabexOrderbookVo.getAsks()[i][0] , brabexOrderbookVo.getAsks()[i][1] ) );
+			}
+			
+			for(int i = 0; i < brabexOrderbookVo.getBids().length; i++){
+				orderbookBidVoList.add( normalizeDataOrderbookBid(brabexOrderbookVo.getBids()[i][0] , brabexOrderbookVo.getBids()[i][1] ) );
+			}
+			
+			orderbookVo.setOrderbookAsk(orderbookAskVoList);
+			orderbookVo.setOrderbookBid(orderbookBidVoList);
+			
+			return orderbookVo;
 		
-		List<OrderbookAskVo> orderbookAskVoList = new ArrayList<OrderbookAskVo>();
-		List<OrderbookBidVo> orderbookBidVoList = new ArrayList<OrderbookBidVo>();
-		
-		
-		for(int i = 0; i < brabexOrderbookVo.getAsks().length; i++){
-			orderbookAskVoList.add( normalizeDataOrderbookAsk(brabexOrderbookVo.getAsks()[i][0] , brabexOrderbookVo.getAsks()[i][1] ) );
+		}catch (Exception e) {
+			return createDefaultObject(NAME, LOCATE, coin);
 		}
-		
-		for(int i = 0; i < brabexOrderbookVo.getBids().length; i++){
-			orderbookBidVoList.add( normalizeDataOrderbookBid(brabexOrderbookVo.getBids()[i][0] , brabexOrderbookVo.getBids()[i][1] ) );
-		}
-		
-		orderbookVo.setOrderbookAsk(orderbookAskVoList);
-		orderbookVo.setOrderbookBid(orderbookBidVoList);
-		
-		return orderbookVo;
 		
 	}
 	

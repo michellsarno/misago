@@ -3,13 +3,12 @@ package br.com.misago.bitcoin.service.orderbook;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.misago.bitcoin.service.ConnectionApiRestService;
 import br.com.misago.bitcoin.vo.orderbook.MercadoBitcoinOrderbookVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookAskVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookBidVo;
 import br.com.misago.bitcoin.vo.orderbook.OrderbookVo;
 
-public class OrderbookBRMercadoBitcoin extends ConnectionApiRestService{
+public class OrderbookBRMercadoBitcoin extends OrderbookDefault{
 	
 	private static String NAME = "Mercado Bitcoin";
 	private static String LOCATE = "BR";
@@ -26,26 +25,31 @@ public class OrderbookBRMercadoBitcoin extends ConnectionApiRestService{
 	
 	public OrderbookVo getOrderbook(){
 		
-		MercadoBitcoinOrderbookVo mercadoBitcoinOrderbookVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , MercadoBitcoinOrderbookVo.class);
+		try{
+			MercadoBitcoinOrderbookVo mercadoBitcoinOrderbookVo = getRestTemplate().getForObject( URL.replace("#COIN#", coin) , MercadoBitcoinOrderbookVo.class);
+			
+			OrderbookVo orderbookVo = new OrderbookVo();
+			
+			List<OrderbookAskVo> orderbookAskVoList = new ArrayList<OrderbookAskVo>();
+			List<OrderbookBidVo> orderbookBidVoList = new ArrayList<OrderbookBidVo>();
+			
+			
+			for(int i = 0; i < mercadoBitcoinOrderbookVo.getAsks().length; i++){
+				orderbookAskVoList.add( normalizeDataOrderbookAsk(mercadoBitcoinOrderbookVo.getAsks()[i][0] , mercadoBitcoinOrderbookVo.getAsks()[i][1] ) );
+			}
+			
+			for(int i = 0; i < mercadoBitcoinOrderbookVo.getBids().length; i++){
+				orderbookBidVoList.add( normalizeDataOrderbookBid(mercadoBitcoinOrderbookVo.getBids()[i][0] , mercadoBitcoinOrderbookVo.getBids()[i][1] ) );
+			}
+			
+			orderbookVo.setOrderbookAsk(orderbookAskVoList);
+			orderbookVo.setOrderbookBid(orderbookBidVoList);
+			
+			return orderbookVo;
 		
-		OrderbookVo orderbookVo = new OrderbookVo();
-		
-		List<OrderbookAskVo> orderbookAskVoList = new ArrayList<OrderbookAskVo>();
-		List<OrderbookBidVo> orderbookBidVoList = new ArrayList<OrderbookBidVo>();
-		
-		
-		for(int i = 0; i < mercadoBitcoinOrderbookVo.getAsks().length; i++){
-			orderbookAskVoList.add( normalizeDataOrderbookAsk(mercadoBitcoinOrderbookVo.getAsks()[i][0] , mercadoBitcoinOrderbookVo.getAsks()[i][1] ) );
+		}catch (Exception e) {
+			return createDefaultObject(NAME, LOCATE, coin);
 		}
-		
-		for(int i = 0; i < mercadoBitcoinOrderbookVo.getBids().length; i++){
-			orderbookBidVoList.add( normalizeDataOrderbookBid(mercadoBitcoinOrderbookVo.getBids()[i][0] , mercadoBitcoinOrderbookVo.getBids()[i][1] ) );
-		}
-		
-		orderbookVo.setOrderbookAsk(orderbookAskVoList);
-		orderbookVo.setOrderbookBid(orderbookBidVoList);
-		
-		return orderbookVo;
 		
 	}
 	

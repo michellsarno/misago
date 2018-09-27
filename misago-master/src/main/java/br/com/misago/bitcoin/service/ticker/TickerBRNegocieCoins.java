@@ -3,11 +3,10 @@ package br.com.misago.bitcoin.service.ticker;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import br.com.misago.bitcoin.service.ConnectionApiRestService;
 import br.com.misago.bitcoin.vo.TickerNegocieCoinsVo;
 import br.com.misago.bitcoin.vo.TickerVo;
 
-public class TickerBRNegocieCoins extends ConnectionApiRestService{
+public class TickerBRNegocieCoins extends TickerDefault{
 	
 	private static String NAME = "NegocieCoins";
 	private static String LOCATE = "BR";
@@ -25,9 +24,16 @@ public class TickerBRNegocieCoins extends ConnectionApiRestService{
 	
 	public TickerVo getTicker(){
 		
-		TickerNegocieCoinsVo tickerVo = getRestTemplate().getForObject( URL_TICKER.replace("#COIN#", coin) , TickerNegocieCoinsVo.class);
-	
-		return normalizeDataTickerMercadoBitCoin(tickerVo);
+		try{
+		
+			TickerNegocieCoinsVo tickerVo = getRestTemplate().getForObject( URL_TICKER.replace("#COIN#", coin) , TickerNegocieCoinsVo.class);
+			
+			return normalizeDataTickerMercadoBitCoin(tickerVo);
+			
+		}catch (Exception e) {
+			
+			return createDefaultObject(NAME,LOCATE);
+		}
 		
 	}
 	
